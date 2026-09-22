@@ -11,7 +11,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Change this before deploying
-app.secret_key = "change-this-secret-key"
+app.secret_key = os.getenv("SECRET_KEY")
 
 # Upload settings
 UPLOAD_FOLDER = "uploads"
