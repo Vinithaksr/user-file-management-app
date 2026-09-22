@@ -1,0 +1,60 @@
+<<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sign Up</title>
+</head>
+
+<body>
+
+    <h2>Create Account</h2>
+
+    <form method="POST" action="/signup">
+
+        <label>Name:</label><br>
+        <input type="text" name="name" required>
+        <br><br>
+
+        <label>Age:</label><br>
+        <input type="number" name="age" min="1" max="120" required>
+        <br><br>
+
+        <label>Address:</label><br>
+        <textarea name="address" required></textarea>
+        <br><br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email" required>
+        <br><br>
+
+        <label>Mobile Number:</label><br>
+        <input
+            type="tel"
+            name="mobile"
+            pattern="[0-9]{10}"
+            maxlength="10"
+            required
+        >
+        <br><br>
+
+        <label>Password:</label><br>
+        <input
+            type="password"
+            name="password"
+            minlength="6"
+            required
+        >
+        <br><br>
+
+        <button type="submit">Sign Up</button>
+
+    </form>
+
+    <p>
+        Already have an account?
+        <a href="/login">Login</a>
+    </p>
+
+</body>
+
+</html>

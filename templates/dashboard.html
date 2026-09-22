@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <h2>Welcome, {{ user_name }}!</h2>
+
+    <p>You have successfully logged in.</p>
+
+    <hr>
+
+    <h3>Upload File</h3>
+
+    <p>Allowed files: PDF, PNG, JPG, JPEG</p>
+
+    <form
+        method="POST"
+        action="/upload"
+        enctype="multipart/form-data"
+    >
+
+        <input
+            type="file"
+            name="file"
+            accept=".pdf,.png,.jpg,.jpeg"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Upload
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h3>Download Test File</h3>
+
+    <a href="/download">
+        <button type="button">
+            Download Test File
+        </button>
+    </a>
+
+    <br><br>
+
+    <a href="/logout">
+        <button type="button">
+            Logout
+        </button>
+    </a>
+
+</body>
+
+</html>
