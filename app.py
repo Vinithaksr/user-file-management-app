@@ -246,10 +246,7 @@ def login():
             session["user_name"] = user["name"]
             session["user_email"] = user["email"]
 
-            flash(
-                "Login successful.",
-                "success"
-            )
+            
 
             return redirect(
                 url_for("dashboard")
