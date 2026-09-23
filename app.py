@@ -5,19 +5,26 @@ from uuid import uuid4
 from functools import wraps
 
 from dotenv import load_dotenv
+
 from flask import (
     Flask,
     flash,
+    get_flashed_messages,
     redirect,
     render_template,
     request,
     send_from_directory,
     session,
-    url_for,
+    url_for
 )
 
 from supabase import create_client
-from werkzeug.security import check_password_hash, generate_password_hash
+
+from werkzeug.security import (
+    check_password_hash,
+    generate_password_hash
+)
+
 from werkzeug.utils import secure_filename
 
 
@@ -44,6 +51,7 @@ supabase = create_client(
     SUPABASE_URL,
     SUPABASE_KEY
 )
+
 
 # Supabase Storage bucket
 STORAGE_BUCKET = "uploads"
@@ -96,6 +104,7 @@ def clean_name_for_filename(name):
 
 
 def login_required(view):
+
     @wraps(view)
     def wrapped_view(*args, **kwargs):
 
@@ -131,12 +140,14 @@ def validate_signup_data(
         return "Name must contain only letters and spaces."
 
     try:
+
         age_number = int(age)
 
         if age_number < 18 or age_number > 120:
             return "Age must be between 18 and 120."
 
     except ValueError:
+
         return "Age must be a valid number."
 
     # Email validation
@@ -246,8 +257,10 @@ def login():
             session["user_name"] = user["name"]
             session["user_email"] = user["email"]
 
-            
+            # Clear any old flash messages
+            get_flashed_messages()
 
+            # Go to dashboard
             return redirect(
                 url_for("dashboard")
             )
@@ -318,7 +331,7 @@ def signup():
             ""
         )
 
-        # Validate
+        # Validate signup data
         validation_error = validate_signup_data(
             name,
             age,
@@ -454,7 +467,7 @@ def download_file():
 @login_required
 def upload_files():
 
-    # Get ONE file from dashboard
+    # Get one file from dashboard
     uploaded_file = request.files.get("file")
 
     # No file selected
@@ -522,10 +535,7 @@ def upload_files():
             or "application/octet-stream"
         )
 
-        # -----------------------------------------
         # Upload file to Supabase Storage
-        # -----------------------------------------
-
         supabase.storage.from_(
             STORAGE_BUCKET
         ).upload(
@@ -537,10 +547,7 @@ def upload_files():
             }
         )
 
-        # -----------------------------------------
         # Save file information in database
-        # -----------------------------------------
-
         supabase.table(
             "uploaded_files"
         ).insert({
@@ -550,16 +557,13 @@ def upload_files():
             "file_type": extension
         }).execute()
 
-        # -----------------------------------------
         # Success message
-        # -----------------------------------------
-
         flash(
             "File uploaded successfully!",
             "success"
         )
 
-        # Go back to Dashboard
+        # Go back to dashboard
         return redirect(
             url_for("dashboard")
         )
@@ -576,66 +580,6 @@ def upload_files():
             "error"
         )
 
-        return redirect(
-            url_for("dashboard")
-        )
-        
-
-        # -----------------------------------------
-        # Upload actual file to Supabase Storage
-        # -----------------------------------------
-
-        supabase.storage.from_(
-            STORAGE_BUCKET
-        ).upload(
-            storage_path,
-            file_data,
-            {
-                "content-type": content_type,
-                "upsert": False
-            }
-        )
-
-        # -----------------------------------------
-        # Save file information in database
-        # -----------------------------------------
-
-        supabase.table(
-            "uploaded_files"
-        ).insert({
-            "user_id": user_id,
-            "original_filename": original_filename,
-            "stored_filename": stored_filename,
-            "file_type": extension
-        }).execute()
-
-        # -----------------------------------------
-        # Success
-        # -----------------------------------------
-
-        flash(
-            "File uploaded successfully!",
-            "success"
-        )
-
-        # Stay on dashboard
-        return redirect(
-            url_for("dashboard")
-        )
-
-    except Exception as error:
-
-        print(
-            "Upload error:",
-            error
-        )
-
-        flash(
-            "File upload failed. Please try again.",
-            "error"
-        )
-
-        # Return to dashboard instead of upload page
         return redirect(
             url_for("dashboard")
         )
