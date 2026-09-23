@@ -6,19 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Dashboard</title>
-
-    <style>
-        .success {
-            color: green;
-            font-weight: bold;
-        }
-
-        .error {
-            color: red;
-            font-weight: bold;
-        }
-    </style>
-
 </head>
 
 <body>
@@ -27,19 +14,14 @@
 
     <p>You have successfully logged in.</p>
 
-    <hr>
-
     <!-- Flash Messages -->
-
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
 
             {% for category, message in messages %}
 
-                <p class="{{ category }}">
-                    {{ message }}
-                </p>
+                <p>{{ message }}</p>
 
             {% endfor %}
 
@@ -47,8 +29,7 @@
 
     {% endwith %}
 
-
-    <!-- Upload -->
+    <hr>
 
     <h3>Upload File</h3>
 
@@ -73,11 +54,7 @@
 
     </form>
 
-
     <hr>
-
-
-    <!-- Download -->
 
     <h3>Download Test File</h3>
 
@@ -87,11 +64,7 @@
         </button>
     </a>
 
-
     <br><br>
-
-
-    <!-- Logout -->
 
     <a href="{{ url_for('logout') }}">
         <button type="button">
